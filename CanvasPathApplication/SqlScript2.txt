@@ -1,0 +1,318 @@
+  RawStudents
+  CREATE TABLE `RawStudents` (
+  `FullName` varchar(45) DEFAULT NULL,
+  `Email` varchar(45) DEFAULT NULL,
+  `Age` int(11) DEFAULT NULL,
+  `Zip` varchar(45) DEFAULT NULL,
+  `Phone` varchar(15) DEFAULT NULL,
+  `Gender` varchar(45) DEFAULT NULL,
+  `City` varchar(45) DEFAULT NULL,
+  `State` varchar(45) DEFAULT NULL,
+  `Password` varchar(45) DEFAULT NULL,
+  `Street` varchar(45) DEFAULT NULL,
+  `Major` varchar(45) DEFAULT NULL,
+  `Course1` varchar(45) DEFAULT NULL,
+  `Course1Name` text,
+  `Course1Details` text,
+  `Course1Type` varchar(45) DEFAULT NULL,
+  `Course1Section` int(11) DEFAULT NULL,
+  `Course1Limit` int(11) DEFAULT NULL,
+  `Course1HwNo` int(11) DEFAULT NULL,
+  `Course1HwDetails` text,
+  `Course1HwGrade` int(11) DEFAULT NULL,
+  `Course1ExamNo` varchar(45) DEFAULT NULL,
+  `Course1ExamDetails` text,
+  `Course1ExamGrade` varchar(45) DEFAULT NULL,
+  `Course2` varchar(45) DEFAULT NULL,
+  `Course2Name` text,
+  `Course2Details` text,
+  `Course2Type` varchar(45) DEFAULT NULL,
+  `Course2Section` int(11) DEFAULT NULL,
+  `Course2Limit` int(11) DEFAULT NULL,
+  `Course2HwNo` int(11) DEFAULT NULL,
+  `Course2HwDetails` text,
+  `Course2HwGrade` int(11) DEFAULT NULL,
+  `Course2ExamNo` varchar(45) DEFAULT NULL,
+  `Course2ExamDetails` text,
+  `Course2ExamGrade` varchar(45) DEFAULT NULL,
+  `Course3` varchar(45) DEFAULT NULL,
+  `Course3Name` text,
+  `Course3Details` text,
+  `Course3Type` varchar(45) DEFAULT NULL,
+  `Course3Section` int(11) DEFAULT NULL,
+  `Course3Limit` int(11) DEFAULT NULL,
+  `Course3HwNo` int(11) DEFAULT NULL,
+  `Course3HwDetails` text,
+  `Course3HwGrade` int(11) DEFAULT NULL,
+  `Course3ExamNo` varchar(45) DEFAULT NULL,
+  `Course3ExamDetails` text,
+  `Course3ExamGrade` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+  1. Student
+
+
+  CREATE TABLE `Students` (
+  `Email` varchar(45) NOT NULL,
+  `Password` varchar(45) DEFAULT NULL,
+  `FullName` varchar(45) DEFAULT NULL,
+  `Age` int(11) DEFAULT NULL,
+  `Gender` varchar(45) DEFAULT NULL,
+  `Major` varchar(45) DEFAULT NULL,
+  `Street` varchar(45) DEFAULT NULL,
+  `Zip` tinytext,
+  PRIMARY KEY (`Email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+Raw Professor
+CREATE TABLE `RawProfessor` (
+  `Name` varchar(45) DEFAULT NULL,
+  `Email` varchar(45) NOT NULL,
+  `Password` varchar(45) DEFAULT NULL,
+  `Age` int(11) DEFAULT NULL,
+  `Gender` varchar(45) DEFAULT NULL,
+  `Department` varchar(45) DEFAULT NULL,
+  `Office` varchar(45) DEFAULT NULL,
+  `DepartmentName` varchar(45) DEFAULT NULL,
+  `Title` varchar(45) DEFAULT NULL,
+  `TeamID` int(11) DEFAULT NULL,
+  `Teaching` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`Email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+  2. Zipcode
+
+
+insert into zipcode (Zip,City,State)
+select Zip, city, state
+from RawStudents 
+
+CREATE TABLE `Zipcode` (
+  `Zip` varchar(45) DEFAULT NULL,
+  `City` varchar(45) DEFAULT NULL,
+  `State` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+  3.Professor
+
+
+ CREATE TABLE `Professor` (
+  `Email` varchar(45) NOT NULL,
+  `Password` varchar(45) DEFAULT NULL,
+  `Name` varchar(45) DEFAULT NULL,
+  `Age` int(11) DEFAULT NULL,
+  `Gender` varchar(45) DEFAULT NULL,
+  `OfficeAddress` varchar(45) DEFAULT NULL,
+  `Department` varchar(45) DEFAULT NULL,
+  `Title` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`Email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+insert into Professor
+select Email, `password`, `name`, age, gender, office,department,title
+from RawProfessor
+  
+
+4.Department
+
+
+CREATE TABLE `Department` (
+  `DeptId` varchar(45) NOT NULL,
+  `DeptName` varchar(45) DEFAULT NULL,
+  `DeptHead` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`DeptId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+insert into Department
+select Department, DepartmentName, `name`
+from RawProfessor R 
+where r.title = "head"
+
+
+  5. Course 
+  CREATE TABLE `Course` (
+  `CourseId` varchar(45) NOT NULL,
+  `CourseName` text,
+  `CourseDescription` text,
+  PRIMARY KEY (`CourseId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+insert into Course
+select distinct course1, course1name,course1details
+from RawStudents S, RawProfessor P 
+where P.teaching = S.course1 
+
+  6.Secion
+CREATE TABLE `Sections` (
+  `CourseID` varchar(45) NOT NULL,
+  `SectionNo` int(11) NOT NULL,
+  `SectionType` varchar(45) DEFAULT NULL,
+  `Limit` int(11) DEFAULT NULL,
+  `profTeamid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`CourseID`,`SectionNo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+insert into Sections(CourseId,SectionNo,Sectiontype,`limit`)
+select distinct S.course1, S.course1section, S.course1type, S.course1limit
+from RawStudents S, RawProfessor P, Course C
+where C.courseid = S.Course1 
+order by S.course1,S.course1section
+
+insert into Sections (profTeamid)
+select TeamID
+from RawProfessor P, Course C, Sections s1
+where P.teaching = s1.courseid
+
+
+
+  7. Enrolls
+insert into Enrolls
+select distinct Raw.email, Sec.courseid, Sec.sectionno
+from RawStudents Raw, RawStudents Raw2, Sections sec, students s
+where raw2.email= raw.email and Raw.course1 = Sec.courseid and  Raw.course1section = Sec.sectionno
+
+insert into Enrolls
+select distinct Raw.email, Sec.courseid, Sec.sectionno
+from RawStudents Raw, RawStudents Raw2, Sections sec, students s
+where raw2.email= raw.email and Raw.course2 = Sec.courseid and  Raw.course2section = Sec.sectionno
+
+insert into Enrolls
+select distinct Raw.email, Sec.courseid, Sec.sectionno
+from RawStudents Raw, RawStudents Raw2, Sections sec, students s
+where raw2.email= raw.email and Raw.course3 = Sec.courseid and  Raw.course3section = Sec.sectionno
+
+/////order by email
+select studentemail,courseid,sectionno
+From Enrolls
+Order by studentemail
+
+CREATE TABLE `Sections` (
+  `CourseID` varchar(45) NOT NULL,
+  `SectionNo` int(11) NOT NULL,
+  `SectionType` varchar(45) DEFAULT NULL,
+  `Limit` int(11) DEFAULT NULL,
+  `profTeamid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`CourseID`,`SectionNo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+  8. Prof_teams
+  insert into ProfTeams
+select TeamId
+from rawprofessor
+
+CREATE TABLE `ProfTeams` (
+  `TeamId` int(11) NOT NULL,
+  PRIMARY KEY (`TeamId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+  9. Prof Team members
+
+CREATE TABLE `ProfTeamMembers` (
+  `ProfEmail` varchar(45) DEFAULT NULL,
+  `TeamId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+  insert into Enrolls
+select distinct Raw.email, Sec.courseid, Sec.sectionno
+from RawStudents Raw, RawStudents Raw2, Sections sec, students s
+where raw2.email= raw.email and Raw.course3 = Sec.courseid and  Raw.course3section = Sec.sectionno
+
+  10. Homework
+  insert into Homework
+select distinct Raw.course1, Raw.course1section, Raw.course1Hwno, Raw.course1HwDetails
+from RawStudents Raw
+
+insert into Homework
+select distinct Raw.course2, Raw.course3section, Raw.course2Hwno, Raw.course2HwDetails
+from RawStudents Raw
+
+insert into Homework
+select distinct Raw.course3, Raw.course3section, Raw.course3Hwno, Raw.course3HwDetails
+from RawStudents Raw
+
+////Remember that you used two Homeworks table so create same table with same parameter but dif table
+insert into Homework1
+select distinct courseid,secno,hwno,hwdetails
+from homework
+order by courseid,secno,hwno
+
+
+  11. Homework Grades
+insert into HomeworkGrades
+select distinct Raw.email, Raw.course1, Raw.course1section, Raw.course1Hwno,Raw.course1hwGrade
+from RawStudents Raw
+
+insert into HomeworkGrades
+select distinct Raw.email, Raw.course2, Raw.course2section, Raw.course2Hwno,Raw.course2hwGrade
+from RawStudents Raw
+
+insert into HomeworkGrades
+select distinct Raw.email, Raw.course3, Raw.course3section, Raw.course3Hwno,Raw.course3hwGrade
+from RawStudents Raw
+
+////Remember that you used two Homeworks table so create same table with same parameter but dif table
+insert into HomeworkGrades1
+select distinct studentemail,courseid,secno,hwno,grade
+from HomeworkGrades
+order by studentemail,courseid,secno,hwno
+
+
+  12. Exams
+SET GLOBAL sql_mode = 'NO_ENGINE_SUBSTITUTION';
+SET SESSION sql_mode = 'NO_ENGINE_SUBSTITUTION';
+
+
+ insert into Exams
+select distinct Raw.course1, Raw.course1section, Raw.course1examno,Raw.course1examdetails
+from RawStudents Raw
+ insert into Exams
+select distinct Raw.course2, Raw.course2section, Raw.course2examno,Raw.course2examdetails
+from RawStudents Raw
+ insert into Exams
+select distinct Raw.course3, Raw.course3section, Raw.course3examno,Raw.course3examdetails
+from RawStudents Raw
+
+///////Remember that you used two Homeworks table so create same table with same parameter but dif table
+
+insert into Exams1
+select distinct courseid,secno,examno,examdetails
+from Exams
+order by courseid,secno,examno
+
+  13. Exam Grades
+  insert into ExamGrades
+select distinct Raw.email, Raw.course1, Raw.course1section, Raw.course1examno,Raw.course1examgrade
+from RawStudents Raw
+
+insert into ExamGrades
+select distinct Raw.email, Raw.course2, Raw.course2section, Raw.course2examno,Raw.course2examgrade
+from RawStudents Raw
+
+insert into ExamGrades
+select distinct Raw.email, Raw.course3, Raw.course3section, Raw.course3examno,Raw.course3examgrade
+from RawStudents Raw
+
+CREATE TABLE `ExamGrades1` (
+  `StudentEmail` varchar(45) DEFAULT NULL,
+  `CourseID` varchar(45) DEFAULT NULL,
+  `SecNo` int(11) DEFAULT NULL,
+  `ExamNo` int(11) DEFAULT NULL,
+  `Grades` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+  ////Remember that you used two Homeworks table so create same table with same parameter but dif table
+
+insert into ExamGrades1
+select distinct studentemail,courseid,secno,examno,grades
+from ExamGrades
+order by studentemail,courseid,secno
+
+//change title to ExamGrades
+
+  14. Capstone Section
+  15. Capstone Team
+  16. Capstone Team Members
+  17. Capstone Grades

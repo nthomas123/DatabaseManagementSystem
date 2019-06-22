@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CanvasPath</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<style>
+  footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: dodgerblue;
+  color: white;
+  text-align: center;
+}
+</style>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">CanvasPath</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+
+      </li>
+        {%if session.student%}
+        <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+        </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/test1">Courses Information</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/personalinfo">Personal Information</a>
+      </li>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/studentassignment">Homework Assignments</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/studentgrade">Homeworks Grades</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/studentexamassignment">Exam Assignments</a>
+      </li>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/studentexamgrade">Exam Grades</a>
+      </li>
+
+      {%elif session.admin%}
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/adminaddcourse">Add Course</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/adminremovecourse">Remove Course</a>
+      </li>
+      {%elif session.faculty%}
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/facultyassignemnt">Add Homework</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/facultyaddexam">Add Exam</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/facultyhwgrade">View Homework Grades</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/facultyexamgrade">View Exam Grades</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/login">Student Login</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/flogin">Faculty Login</a>
+      </li>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/adminlogin">Admin Login</a>
+      </li>
+        {%endif%}
+    </ul>
+  </div>
+</nav>
+        {% include "includes/_message.html" %}
+
+    {%block body%}
+    {% endblock %}
+    <footer>
+      <p>CanvasPath, Copyright &copy; 2019</p>
+    </footer>
+</body>
+</html>

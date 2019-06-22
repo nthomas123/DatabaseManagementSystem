@@ -1,0 +1,43 @@
+{% extends "layout.html"%}
+{% block body%}
+<h1>Personal Information:</h1>
+<table border = 1 class="table table-striped table table-hover">
+    <thead class="thead-dark">
+    <tr>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Major</th>
+        <th>Street</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        {% for row in value%}
+            <tr>
+                {% for d in row%}
+                <td>{{ d }}</td>
+                {%endfor%}
+            </tr>
+        {%endfor%}
+    </tr>
+
+    </tbody>
+</table>
+    <h2> Update Password</h2>
+<h6>If you would like to change your current password please enter your current password and new password</h6>
+        <form action = "" method = "POST">
+
+        <div class="form-group">
+            <input type = "text" name="cpassword" class= "form-control" placeholder = "Current Password" required>
+        </div>
+
+        <div class="form-group">
+            <input type = "text" name="npassword" class= "form-control" placeholder = "Updated Password" required>
+        </div>
+            <button class= "btn btn-primary" type= "submit" > Submit </button>
+
+    </form>
+{% endblock %}

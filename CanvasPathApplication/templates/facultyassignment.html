@@ -1,0 +1,21 @@
+{% extends "layout.html"%}
+{% block body%}
+<div class = "container">
+    <h1> Add Homework</h1>
+        <form action = "" method = "POST">
+        <div class="form-group">
+            <input type = "text" name="CourseId" class= "form-control" placeholder = "CourseId" required>
+        </div>
+        <div class="form-group">
+            <input type = "text" name="SectionNo" class= "form-control" placeholder = "SectionNo" required>
+        </div>
+        <div class="form-group">
+            <input type = "text" name="HwNo" class= "form-control" placeholder = "HwNo" required>
+        </div>
+        <div class="form-group">
+            <input type = "text" name="HwDetails" class= "form-control" placeholder = "HwDetails" required>
+        </div>
+            <button class= "btn btn-primary" type= "submit" > Submit </button>
+    </form>
+</div>
+{% endblock %}

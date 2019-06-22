@@ -1,0 +1,32 @@
+{% extends "layout.html"%}
+{% block body%}
+<div class = "container">
+    <h1> Admin Add Courses</h1>
+        <form action = "" method = "POST">
+        <div class="form-group">
+            <input type = "text" name="CourseId" class= "form-control" placeholder = "Course Id" required>
+        </div>
+        <div class="form-group">
+            <input type = "text" name="CourseName" class= "form-control" placeholder = "Course Name" required>
+        </div>
+        <div class="form-group">
+            <input type = "text" name="CourseDescription" class= "form-control" placeholder = "Course Description" required>
+        </div>
+        <div class="form-group">
+             <input type = "text" name="SectionNo" class= "form-control" placeholder = "Section Number" required>
+         </div>
+        <div class="form-group">
+             <input type = "text" name="SectionType" class= "form-control" placeholder = "Section Type" required>
+         </div>
+        <div class="form-group">
+             <input type = "text" name="SectionLimit" class= "form-control" placeholder = "Section Limit" required>
+         </div>
+         <div class="form-group">
+             <input type = "text" name="Professor" class= "form-control" placeholder = "Professor teaching the course" required>
+         </div>
+
+
+            <button class= "btn btn-primary" type= "submit" > Submit </button>
+    </form>
+</div>
+{% endblock %}
