@@ -23,4 +23,3 @@ Admin
 admin@lionstate.edu
 password
 
- For the “Administration” task, add a user with the email admin@lionstate.edu with your choice of password
